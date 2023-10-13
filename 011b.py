@@ -1,7 +1,7 @@
 import functions as f
 import math
 
-input = f.openFile('011_testinput.txt')
+input = f.openFile('011_input.txt')
 list = input.split("\n")
 monkey_list = []
 inventory_list = []
@@ -10,23 +10,25 @@ to_if_true_list = []
 to_if_wrong_list = []
 operation_list = []
 counter = []
-worry_level = 3
-rounds = range(0,20)
+worry_level = 1 
+rounds = range(0,10000)
 
 for l in list:
-    if l.find("Starting items") == 2:
+    # if l.find("Starting items") > -1:
+    if "Starting items" in l:
         inventory_list.append(l[18:])
-    if l.find("Monkey") == 0:
+    if l.find("Monkey") > -1:
         monkey_list.append(l[-2:-1])
         counter.append(0)
-    if l.find("divisible") == 8:
-        check_list.append(l[21:])
-    if l.find("true") == 7:
+    if l.find("divisible") > -1:
+        check_list.append(int(l[21:]))
+    if l.find("true") > -1:
         to_if_true_list.append(l[29:])
-    if l.find("false") == 7:
+    if l.find("false") > -1:
         to_if_wrong_list.append(l[29:])
-    if l.find("Operation") == 2:    
+    if l.find("Operation") > -1:  
         operation_list.append(l)
+prime_number = math.prod(check_list)
 
 for r in rounds:
     for m in monkey_list:
@@ -49,6 +51,7 @@ for r in rounds:
                         new = math.floor((int(item) * int(actions[7])) / worry_level)
                     if actions[6] == "+":
                         new = math.floor((int(item) + int(actions[7])) / worry_level)
+                new = new % prime_number
                 sum = new / int(check)
                 counter[index] = counter[index] + 1
                 if sum.is_integer():
